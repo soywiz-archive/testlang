@@ -190,10 +190,12 @@
     <library name="Generated files" type="javaScript">
       <properties>
         <sourceFilesUrls>
+          <item url="file://$PROJECT_DIR$/Application.js" />
           <item url="file://$PROJECT_DIR$/sample.js" />
         </sourceFilesUrls>
       </properties>
       <CLASSES>
+        <root url="file://$PROJECT_DIR$/Application.js" />
         <root url="file://$PROJECT_DIR$/sample.js" />
       </CLASSES>
       <JAVADOC />

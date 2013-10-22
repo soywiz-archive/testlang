@@ -1,7 +1,9 @@
-var Scheduler = (function () {
-    function Scheduler() {
+// http://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol
+var Application = (function () {
+    function Application() {
+        this.functions = {};
         this.last_call_id = 0;
-        this.calls = {};
+        this.callStates = {};
         this.callQueue = [];
     }
     /**
@@ -9,7 +11,7 @@ var Scheduler = (function () {
     * returns false if function was executed synchronously
     * returns true if function is being executed asynchronously
     */
-    Scheduler.prototype.schedule = function (parentCallState, functionName, locals) {
+    Application.prototype.schedule = function (parentCallState, functionName, arguments) {
         var call_id = this.last_call_id++;
         var callState = {
             function_name: functionName,
@@ -18,76 +20,97 @@ var Scheduler = (function () {
             result_error: false,
             result_value: undefined,
             state: 0,
-            locals: locals
+            arguments: arguments,
+            locals: {}
         };
 
-        this.calls[call_id] = callState;
+        this.callStates[call_id] = callState;
         this.callQueue.push(call_id);
 
         return true;
     };
 
-    Scheduler.prototype.__schedule = function (callState) {
+    Application.prototype.__schedule = function (callState) {
         var call_id = this.last_call_id;
         callState.call_id = call_id;
-        this.calls[call_id] = callState;
+        this.callStates[call_id] = callState;
         return call_id;
     };
 
-    Scheduler.prototype.done_value = function (callState, value) {
+    Application.prototype.done_value = function (callState, value) {
         this.__done(callState, false, value);
     };
 
-    Scheduler.prototype.done_error = function (callState, error) {
+    Application.prototype.done_error = function (callState, error) {
         this.__done(callState, true, error);
     };
 
-    Scheduler.prototype.__done = function (callState, error, value) {
-        var call = this.calls[callState.caller_id];
-        call.result_error = error;
-        call.result_value = value;
-        this.callQueue.push(call.call_id);
+    Application.prototype.__done = function (callState, error, value) {
+        var call = this.callStates[callState.caller_id];
+        if (call) {
+            call.result_error = error;
+            call.result_value = value;
+            this.callQueue.push(call.call_id);
+        }
         this.executeQueued();
     };
 
-    Scheduler.prototype.executeQueued = function () {
+    Application.prototype.serialize = function () {
+        console.log(JSON.stringify(this));
+    };
+
+    Application.prototype.executeQueued = function () {
         while (this.callQueue.length > 0) {
             var call_id = this.callQueue.shift();
-            var call = this.calls[call_id];
+            var call = this.callStates[call_id];
             this.debug(call);
-            functions[call.function_name](call, this);
+            this.functions[call.function_name](call, this);
         }
     };
 
-    Scheduler.prototype.getResult = function (callState) {
+    Application.prototype.getResult = function (callState) {
         if (callState.result_error)
             throw (callState.result_value);
         return callState.result_value;
     };
 
-    Scheduler.prototype.return_async = function (callState) {
-        return true;
-    };
-
-    Scheduler.prototype.return_sync = function (callState) {
+    Application.prototype.return_wait_async = function (callState) {
         return false;
     };
 
-    Scheduler.prototype.debug = function (callState) {
+    Application.prototype.__done_remove_call = function (callState) {
+        delete this.callStates[callState.call_id];
+    };
+
+    Application.prototype.return_complete_async = function (callState, result) {
+        this.__done_remove_call(callState);
+        this.done_value(callState, result);
+        return true;
+    };
+
+    Application.prototype.return_error_async = function (callState, error) {
+        this.__done_remove_call(callState);
+        this.done_error(callState, error);
+        return true;
+    };
+
+    Application.prototype.return_sync = function (callState) {
+        return false;
+    };
+
+    Application.prototype.debug = function (callState) {
         console.log('## callState:' + callState.function_name + '@' + callState.state + ':' + JSON.stringify(callState.locals));
     };
-    return Scheduler;
+    return Application;
 })();
 
-var functions = {};
+var application = new Application();
 
-functions.downloadUrl = function (localState, api) {
+application.functions.downloadUrl = function (callState, api) {
     setTimeout(function () {
-        api.done_value(localState, 'Hello World!');
+        return api.return_complete_async(callState, 'Hello World!');
     }, 1000);
-
-    //return api.return_sync(localState);
-    return api.return_async(localState);
+    return api.return_wait_async(callState);
 };
 
 /*
@@ -97,28 +120,27 @@ trace(html);
 return 123456;
 }
 */
-functions.test__v1 = function (localState, api) {
+application.functions.test__v1 = function (callState, api) {
     try  {
         while (true) {
-            switch (localState.state) {
+            switch (callState.state) {
                 case 0:
-                    localState.state = 1;
-                    if (api.schedule(localState, 'downloadUrl', { position: { x: 0, y: 0 } }))
-                        return;
+                    callState.state = 1;
+                    if (api.schedule(callState, 'downloadUrl', [{ x: 0, y: 0 }]))
+                        return api.return_wait_async(callState);
                     break;
                 case 1:
-                    localState.state = 2;
-                    localState.locals.html = api.getResult(localState);
+                    callState.state = 2;
+                    callState.locals.html = api.getResult(callState);
                     break;
                 case 2:
-                    console.log('wow!: ' + localState.locals.html);
-                    api.done_value(localState, 123456);
-                    return api.return_async(localState);
+                    console.log('wow!: ' + callState.locals.html);
+                    return api.return_complete_async(callState, 123456);
                     break;
             }
         }
     } catch (e) {
-        api.done_error(localState, e);
+        return api.return_error_async(callState, e);
     }
 };
 
@@ -128,27 +150,28 @@ test();
 }
 }
 */
-functions.main__v1 = function (localState, api) {
+application.functions.main__v1 = function (callState, api) {
     try  {
         while (true) {
-            switch (localState.state) {
+            switch (callState.state) {
                 case 0:
-                    localState.state = 1;
-                    if (api.schedule(localState, 'test__v1', {}))
-                        return;
+                    callState.state = 1;
+                    if (api.schedule(callState, 'test__v1', []))
+                        return api.return_wait_async(callState);
                     break;
                 case 1:
-                    return;
+                    console.log('completed!');
+                    return api.return_complete_async(callState, undefined);
                     break;
             }
         }
     } catch (e) {
-        api.done_error(localState, e);
+        return api.return_error_async(callState, e);
     }
 };
 
+//console.log(String(application.functions.main__v1));
 //test();
-var scheduler = new Scheduler();
-scheduler.schedule(null, 'main__v1', {});
-scheduler.executeQueued();
+application.schedule(null, 'main__v1', []);
+application.executeQueued();
 //# sourceMappingURL=sample.js.map
