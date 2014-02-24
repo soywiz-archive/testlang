@@ -33,5 +33,4 @@ describe('ParserTest', function () {
         assert.equal(2, evaluateExpression('1 ? 2 : 0'));
     });
 });
-
 //# sourceMappingURL=ParserTest.js.map

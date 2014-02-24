@@ -13,7 +13,5 @@ var IndentedStringWriter = (function () {
     return IndentedStringWriter;
 })();
 
-
 module.exports = IndentedStringWriter;
-
 //# sourceMappingURL=IndentedStringWriter.js.map

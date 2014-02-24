@@ -51,7 +51,5 @@ var StringReader = (function () {
     return StringReader;
 })();
 
-
 module.exports = StringReader;
-
 //# sourceMappingURL=StringReader.js.map

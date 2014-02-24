@@ -91,7 +91,7 @@ var Parser = (function () {
                 var expr = this.parseUnary();
                 return new Nodes.NodeExprUnary(operator, expr);
             default:
-                if (token.type == TokenType.number) {
+                if (token.type == 3 /* number */) {
                     this.tokenizer.skipToken();
                     return new Nodes.NodeExprLiteral(token.value);
                 }
@@ -101,7 +101,5 @@ var Parser = (function () {
     return Parser;
 })();
 
-
 module.exports = Parser;
-
 //# sourceMappingURL=Parser.js.map

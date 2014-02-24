@@ -68,5 +68,4 @@ var NodeExprTernary = (function (_super) {
     return NodeExprTernary;
 })(NodeExpr);
 exports.NodeExprTernary = NodeExprTernary;
-
 //# sourceMappingURL=Nodes.js.map

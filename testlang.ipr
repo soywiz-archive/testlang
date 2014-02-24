@@ -190,36 +190,38 @@
     <library name="Generated files" type="javaScript">
       <properties>
         <sourceFilesUrls>
-          <item url="file://$PROJECT_DIR$/compiler/src/Token.js" />
           <item url="file://$PROJECT_DIR$/compiler/src/IndentedStringWriter.js" />
-          <item url="file://$PROJECT_DIR$/compiler/src/Parser.js" />
-          <item url="file://$PROJECT_DIR$/compiler/src/Generator.js" />
           <item url="file://$PROJECT_DIR$/compiler/test/TokenizerTest.js" />
-          <item url="file://$PROJECT_DIR$/compiler/test/StringReaderTest.js" />
-          <item url="file://$PROJECT_DIR$/compiler/src/TokenType.js" />
-          <item url="file://$PROJECT_DIR$/compiler/test/ParserTest.js" />
-          <item url="file://$PROJECT_DIR$/sample/sample.js" />
           <item url="file://$PROJECT_DIR$/compiler/src/Nodes.js" />
+          <item url="file://$PROJECT_DIR$/compiler/src/TokenType.js" />
+          <item url="file://$PROJECT_DIR$/compiler/src/Token.js" />
           <item url="file://$PROJECT_DIR$/compiler/src/StringReader.js" />
+          <item url="file://$PROJECT_DIR$/compiler/test/ParserTest.js" />
           <item url="file://$PROJECT_DIR$/compiler/src/Tokenizer.js" />
+          <item url="file://$PROJECT_DIR$/compiler/src/lalr/Lalr.js" />
+          <item url="file://$PROJECT_DIR$/compiler/test/StringReaderTest.js" />
+          <item url="file://$PROJECT_DIR$/sample/sample.js" />
+          <item url="file://$PROJECT_DIR$/compiler/src/Generator.js" />
+          <item url="file://$PROJECT_DIR$/compiler/src/Parser.js" />
         </sourceFilesUrls>
       </properties>
       <CLASSES>
         <root url="file://$PROJECT_DIR$/Application.js" />
         <root url="file://$PROJECT_DIR$/compiler/Parser2.js" />
         <root url="file://$PROJECT_DIR$/compiler/Parser2.js" />
-        <root url="file://$PROJECT_DIR$/compiler/src/Token.js" />
-        <root url="file://$PROJECT_DIR$/compiler/src/Parser.js" />
         <root url="file://$PROJECT_DIR$/compiler/test/TokenizerTest.js" />
-        <root url="file://$PROJECT_DIR$/sample/sample.js" />
-        <root url="file://$PROJECT_DIR$/compiler/src/IndentedStringWriter.js" />
-        <root url="file://$PROJECT_DIR$/compiler/src/Generator.js" />
         <root url="file://$PROJECT_DIR$/compiler/src/TokenType.js" />
-        <root url="file://$PROJECT_DIR$/compiler/test/StringReaderTest.js" />
-        <root url="file://$PROJECT_DIR$/compiler/test/ParserTest.js" />
+        <root url="file://$PROJECT_DIR$/compiler/src/Token.js" />
         <root url="file://$PROJECT_DIR$/compiler/src/StringReader.js" />
-        <root url="file://$PROJECT_DIR$/compiler/src/Nodes.js" />
         <root url="file://$PROJECT_DIR$/compiler/src/Tokenizer.js" />
+        <root url="file://$PROJECT_DIR$/compiler/src/lalr/Lalr.js" />
+        <root url="file://$PROJECT_DIR$/sample/sample.js" />
+        <root url="file://$PROJECT_DIR$/compiler/src/Parser.js" />
+        <root url="file://$PROJECT_DIR$/compiler/src/IndentedStringWriter.js" />
+        <root url="file://$PROJECT_DIR$/compiler/src/Nodes.js" />
+        <root url="file://$PROJECT_DIR$/compiler/test/ParserTest.js" />
+        <root url="file://$PROJECT_DIR$/compiler/test/StringReaderTest.js" />
+        <root url="file://$PROJECT_DIR$/compiler/src/Generator.js" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />

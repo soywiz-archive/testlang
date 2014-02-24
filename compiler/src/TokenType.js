@@ -7,7 +7,5 @@ var TokenType;
     TokenType[TokenType["string"] = 4] = "string";
 })(TokenType || (TokenType = {}));
 
-
 module.exports = TokenType;
-
 //# sourceMappingURL=TokenType.js.map

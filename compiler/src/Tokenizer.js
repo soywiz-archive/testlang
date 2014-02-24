@@ -77,66 +77,41 @@ var Tokenizer = (function () {
         this.reader.readRegexp(/\s+/);
 
         if (!this.reader.hasMore)
-            return new Token('', TokenType.end);
+            return new Token('', 0 /* end */);
 
         // Try read an operator.
         tokenRawString = this.readTryMatch(Tokenizer.operators, 3);
         if (tokenRawString !== '')
-            return new Token(tokenRawString, TokenType.operator);
+            return new Token(tokenRawString, 1 /* operator */);
 
         // Try read an keyword/identifier.
         tokenRawString = this.reader.readRegexp(/[a-zA-Z_]\w*/);
         if (tokenRawString !== '')
-            return new Token(tokenRawString, TokenType.identifier);
+            return new Token(tokenRawString, 2 /* identifier */);
 
         // Try read a number.
         tokenRawString = this.reader.readRegexp(/((0b[01]+)|(0x[0-9A-Fa-f]+)|(0[0-7]*)|([0-9]+))/);
         if (tokenRawString !== '')
-            return new Token(tokenRawString, TokenType.number, Tokenizer.parseInt(tokenRawString));
+            return new Token(tokenRawString, 3 /* number */, Tokenizer.parseInt(tokenRawString));
 
         throw ("Invalid token '" + this.reader.peek(8) + "' at " + this.reader.offset + ".");
     };
     Tokenizer.operators = [
-        '===',
-        '!===',
-        '==',
-        '!=',
-        '>=',
-        '<=',
-        '>',
-        '<',
-        '=',
-        '<<',
-        '>>',
-        '<<<',
-        '(',
-        ')',
-        '[',
-        ']',
-        '{',
-        '}',
-        '||',
-        '&&',
-        ',',
-        '.',
-        ';',
-        ':',
-        '+',
-        '-',
-        '*',
-        '/',
-        '%',
-        '&',
-        '|',
-        '^',
-        '~',
-        '!',
+        '===', '!===',
+        '==', '!=',
+        '>=', '<=', '>', '<', '=', '<<', '>>', '<<<',
+        '(', ')',
+        '[', ']',
+        '{', '}',
+        '||', '&&',
+        ',', '.', ';', ':',
+        '+', '-', '*', '/', '%',
+        '&', '|', '^',
+        '~', '!',
         '?'
     ];
     return Tokenizer;
 })();
 
-
 module.exports = Tokenizer;
-
 //# sourceMappingURL=Tokenizer.js.map

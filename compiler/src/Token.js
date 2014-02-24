@@ -18,7 +18,5 @@ var Token = (function () {
     return Token;
 })();
 
-
 module.exports = Token;
-
 //# sourceMappingURL=Token.js.map

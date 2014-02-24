@@ -58,7 +58,5 @@ var Generator = (function () {
     return Generator;
 })();
 
-
 module.exports = Generator;
-
 //# sourceMappingURL=Generator.js.map
